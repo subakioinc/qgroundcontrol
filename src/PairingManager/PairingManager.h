@@ -90,6 +90,7 @@ public:
     Q_INVOKABLE void startMicrohardPairing();
 #endif
     Q_INVOKABLE void stopPairing();
+    Q_INVOKABLE void disconnectDevice(const QString& name);
 
     Q_PROPERTY(QString          pairingStatusStr        READ pairingStatusStr        NOTIFY pairingStatusChanged)
     Q_PROPERTY(PairingStatus    pairingStatus           READ pairingStatus           NOTIFY pairingStatusChanged)
@@ -150,6 +151,7 @@ private:
     QTimer                  _uploadTimer;
     bool                    _pairingActive = false;
 
+    QMutex                        _connectedDevicesMutex{};
     QMap<QString, LinkInterface*> _connectedDevices;
 
     void                    _parsePairingJsonFile       ();

@@ -76,6 +76,7 @@ PairingManager::connectedDeviceNameList()
 {
     QStringList list;
 
+    QMutexLocker lock(&_connectedDevicesMutex);
     QMapIterator<QString, LinkInterface*> i(_connectedDevices);
     while (i.hasNext()) {
         i.next();
@@ -134,7 +135,9 @@ PairingManager::_createUDPLink(const QString name, quint16 port)
     SharedLinkConfigurationPointer linkConfig = _toolbox->linkManager()->addConfiguration(udpConfig);
     LinkInterface* link = _toolbox->linkManager()->createConnectedLink(linkConfig);
     connect(link, &LinkInterface::activeChanged, this, &PairingManager::_linkActiveChanged);
+    _connectedDevicesMutex.lock();
     _connectedDevices[name] = link;
+    _connectedDevicesMutex.unlock();
     emit connectedListChanged();
     emit pairedListChanged();
 }
@@ -143,15 +146,19 @@ PairingManager::_createUDPLink(const QString name, quint16 port)
 void
 PairingManager::_removeUDPLink(const QString name)
 {
+    _connectedDevicesMutex.lock();
     if (_connectedDevices.contains(name)) {
+        _toolbox->linkManager()->disconnectLink(_connectedDevices[name]);
+        _connectedDevices.remove(name);
+        _connectedDevicesMutex.unlock();
         if (_connectedDevice == name) {
             _setLastConnectedDevice("");
             _toolbox->videoManager()->stopVideo();
         }
-        _toolbox->linkManager()->disconnectLink(_connectedDevices[name]);
-        _connectedDevices.remove(name);
         emit connectedListChanged();
         emit pairedListChanged();
+    } else {
+        _connectedDevicesMutex.unlock();
     }
 }
 
@@ -556,7 +563,6 @@ PairingManager::_parsePairingJson(QString jsonEnc, bool updateSettings)
         } else if (_remotePairingMap.contains("EK")) {
             _toolbox->microhardManager()->switchToConnectionEncryptionKey(_remotePairingMap["EK"].toString());
         }
-
         _toolbox->microhardManager()->updateSettings();
     }
     emit startUpload(pairURL, jsonDoc);
