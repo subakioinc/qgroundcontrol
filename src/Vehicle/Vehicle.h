@@ -207,6 +207,8 @@ private:
     Fact        _verticalSpeedFact;
 };
 
+
+
 class VehicleGPSFactGroup : public FactGroup
 {
     Q_OBJECT
@@ -486,6 +488,37 @@ private:
 #endif
 };
 
+//jaeeun - add gas fact group 
+class VehicleGasFactGroup : public FactGroup
+{
+    Q_OBJECT
+
+public:
+    VehicleGasFactGroup(QObject* parent = nullptr);
+
+    Q_PROPERTY(Fact* pf1      READ pf1      CONSTANT)
+    Q_PROPERTY(Fact* pf2      READ pf2      CONSTANT)
+    Q_PROPERTY(Fact* temp    READ temp    CONSTANT)
+    Q_PROPERTY(Fact* hum     READ hum     CONSTANT)
+
+    Fact* pf1            (void) { return &_pf1Fact; }
+    Fact* pf2            (void) { return &_pf2Fact; }
+    Fact* temp          (void) { return &_tempFact; }
+    Fact* hum           (void) { return &_humFact; }
+
+    static const char* _pf1FactName;
+    static const char* _pf2FactName;
+    static const char* _tempFactName;
+    static const char* _humFactName;
+
+public:
+    Fact        _pf1Fact;
+    Fact        _pf2Fact;
+    Fact        _tempFact;
+    Fact        _humFact;
+};
+
+
 class Vehicle : public FactGroup
 {
     Q_OBJECT
@@ -671,7 +704,6 @@ public:
     Q_PROPERTY(Fact* altitudeAMSL       READ altitudeAMSL       CONSTANT)
     Q_PROPERTY(Fact* flightDistance     READ flightDistance     CONSTANT)
     Q_PROPERTY(Fact* distanceToHome     READ distanceToHome     CONSTANT)
-    Q_PROPERTY(Fact* headingToNextWP    READ headingToNextWP    CONSTANT)
     Q_PROPERTY(Fact* headingToHome      READ headingToHome      CONSTANT)
     Q_PROPERTY(Fact* distanceToGCS      READ distanceToGCS      CONSTANT)
     Q_PROPERTY(Fact* hobbs              READ hobbs              CONSTANT)
@@ -686,6 +718,7 @@ public:
     Q_PROPERTY(FactGroup* clock             READ clockFactGroup             CONSTANT)
     Q_PROPERTY(FactGroup* setpoint          READ setpointFactGroup          CONSTANT)
     Q_PROPERTY(FactGroup* estimatorStatus   READ estimatorStatusFactGroup   CONSTANT)
+    Q_PROPERTY(FactGroup* gas               READ gasFactGroup               CONSTANT)
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -765,8 +798,7 @@ public:
     /// Test motor
     ///     @param motor Motor number, 1-based
     ///     @param percent 0-no power, 100-full power
-    ///     @param timeoutSec Disabled motor after this amount of time
-    Q_INVOKABLE void motorTest(int motor, int percent, int timeoutSecs);
+    Q_INVOKABLE void motorTest(int motor, int percent);
 
     Q_INVOKABLE void setPIDTuningTelemetryMode(bool pidTuning);
 
@@ -975,7 +1007,6 @@ public:
     Fact* altitudeAMSL      (void) { return &_altitudeAMSLFact; }
     Fact* flightDistance    (void) { return &_flightDistanceFact; }
     Fact* distanceToHome    (void) { return &_distanceToHomeFact; }
-    Fact* headingToNextWP   (void) { return &_headingToNextWPFact; }
     Fact* headingToHome     (void) { return &_headingToHomeFact; }
     Fact* distanceToGCS     (void) { return &_distanceToGCSFact; }
     Fact* hobbs             (void) { return &_hobbsFact; }
@@ -991,6 +1022,7 @@ public:
     FactGroup* setpointFactGroup        (void) { return &_setpointFactGroup; }
     FactGroup* distanceSensorFactGroup  (void) { return &_distanceSensorFactGroup; }
     FactGroup* estimatorStatusFactGroup (void) { return &_estimatorStatusFactGroup; }
+    FactGroup* gasFactGroup             (void) { return &_gasFactGroup;}
 
     void setConnectionLostEnabled(bool connectionLostEnabled);
 
@@ -1249,7 +1281,6 @@ private slots:
     void _clearTrajectoryPoints(void);
     void _clearCameraTriggerPoints(void);
     void _updateDistanceHeadingToHome(void);
-    void _updateHeadingToNextWP(void);
     void _updateDistanceToGCS(void);
     void _updateHobbsMeter(void);
     void _vehicleParamLoaded(bool ready);
@@ -1303,6 +1334,7 @@ private:
     void _handleMessageInterval(const mavlink_message_t& message);
     void _handleGimbalOrientation(const mavlink_message_t& message);
     void _handleObstacleDistance(const mavlink_message_t& message);
+    void _handleGas(mavlink_message_t& message);
     // ArduPilot dialect messages
 #if !defined(NO_ARDUPILOT_DIALECT)
     void _handleCameraFeedback(const mavlink_message_t& message);
@@ -1332,8 +1364,6 @@ private:
     void _pidTuningAdjustRates(bool setRatesForTuning);
     void _handleUnsupportedRequestAutopilotCapabilities(void);
     void _handleUnsupportedRequestProtocolVersion(void);
-    void _initializeCsv();
-    void _writeCsvLine();
 
     int     _id;                    ///< Mavlink system id
     int     _defaultComponentId;
@@ -1349,9 +1379,6 @@ private:
     bool                _soloFirmware;
     QGCToolbox*         _toolbox;
     SettingsManager*    _settingsManager;
-
-    QTimer                  _csvLogTimer;
-    QFile                   _csvLogFile;
 
     QList<LinkInterface*> _links;
 
@@ -1549,7 +1576,6 @@ private:
     Fact _flightDistanceFact;
     Fact _flightTimeFact;
     Fact _distanceToHomeFact;
-    Fact _headingToNextWPFact;
     Fact _headingToHomeFact;
     Fact _distanceToGCSFact;
     Fact _hobbsFact;
@@ -1565,6 +1591,7 @@ private:
     VehicleSetpointFactGroup        _setpointFactGroup;
     VehicleDistanceSensorFactGroup  _distanceSensorFactGroup;
     VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
+    VehicleGasFactGroup             _gasFactGroup;
 
     static const char* _rollFactName;
     static const char* _pitchFactName;
@@ -1580,7 +1607,6 @@ private:
     static const char* _flightDistanceFactName;
     static const char* _flightTimeFactName;
     static const char* _distanceToHomeFactName;
-    static const char* _headingToNextWPFactName;
     static const char* _headingToHomeFactName;
     static const char* _distanceToGCSFactName;
     static const char* _hobbsFactName;
@@ -1595,6 +1621,7 @@ private:
     static const char* _clockFactGroupName;
     static const char* _distanceSensorFactGroupName;
     static const char* _estimatorStatusFactGroupName;
+    static const char* _gasFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs = 100;
 
@@ -1604,3 +1631,4 @@ private:
     static const char* _joystickEnabledSettingsKey;
 
 };
+
