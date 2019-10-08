@@ -97,7 +97,7 @@ Rectangle {
                 anchors.top:        parent.top
                 anchors.bottom:     parent.bottom
                 exclusiveGroup:     mainActionGroup
-                source:             "/res/QGCLogoWhite"
+                subakSource:        "/res/SubakLogo"
                 logo:               true
                 onClicked:          toolBar.showSettingsView()
                 visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
@@ -139,6 +139,7 @@ Rectangle {
                 visible:            !ScreenTools.isMobile && QGroundControl.corePlugin.showAdvancedUI
                 onClicked:          toolBar.showAnalyzeView()
             }
+
 
             Rectangle {
                 anchors.margins:    ScreenTools.defaultFontPixelHeight / 2

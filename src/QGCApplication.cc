@@ -262,9 +262,11 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     if (_runningUnitTests) {
         // We don't want unit tests to use the same QSettings space as the normal app. So we tweak the app
         // name. Also we want to run unit tests with clean settings every time.
-        setApplicationName(QString("%1_unittest").arg(QGC_APPLICATION_NAME));
+        setApplicationName("수박아이오 GroundStation (지상국 SW 3.5.4)");
+        //setApplicationName(QString("%1_unittest").arg(QGC_APPLICATION_NAME));
     } else {
-        setApplicationName(QGC_APPLICATION_NAME);
+        // setApplicationName(QGC_APPLICATION_NAME);
+        setApplicationName("수박아이오 GroundStation (지상국 SW 3.5.4)");
     }
     setOrganizationName(QGC_ORG_NAME);
     setOrganizationDomain(QGC_ORG_DOMAIN);

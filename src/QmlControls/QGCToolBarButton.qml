@@ -22,6 +22,7 @@ Item {
     clip:   true
 
     property alias          source:         icon.source
+    property alias          subakSource:    subakIcon.source
     property bool           checked:        false
     property bool           logo:           false
     property ExclusiveGroup exclusiveGroup:  null
@@ -41,10 +42,11 @@ Item {
     Rectangle {
         anchors.fill:   parent
         visible:        logo
-        color:          qgcPal.brandingPurple
+        color:          "#646464"
+        radius:         5
     }
 
-    QGCColoredImage {
+    SubakColoredImage {
         id:                     icon
         anchors.left:           parent.left
         anchors.right:          parent.right
@@ -52,6 +54,14 @@ Item {
         anchors.top:            parent.top
         anchors.bottomMargin:   _topBottomMargins
         anchors.bottom:         parent.bottom
+        sourceSize.height:      parent.height
+        fillMode:               Image.PreserveAspectFit
+        color:                  logo ? "white" : (checked ? qgcPal.buttonHighlight : qgcPal.buttonText)
+    }
+
+    SubakColoredImage {
+        id:                     subakIcon
+        anchors.fill:           parent
         sourceSize.height:      parent.height
         fillMode:               Image.PreserveAspectFit
         color:                  logo ? "white" : (checked ? qgcPal.buttonHighlight : qgcPal.buttonText)
