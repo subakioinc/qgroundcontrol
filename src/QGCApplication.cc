@@ -265,13 +265,13 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
         setApplicationName("수박아이오 GroundStation (지상국 SW 3.5.4)");
         //setApplicationName(QString("%1_unittest").arg(QGC_APPLICATION_NAME));
     } else {
-        // setApplicationName(QGC_APPLICATION_NAME);
+        //setApplicationName(QGC_APPLICATION_NAME);
         setApplicationName("Subakio GroundStation (v3.0.0)");
     }
     setOrganizationName("");
     setOrganizationDomain("");
 
-    //this->setApplicationVersion(QString("GIT_VERSION"));
+    this->setApplicationVersion(QString("GIT_VERSION"));
 
     // Set settings format
     QSettings::setDefaultFormat(QSettings::IniFormat);

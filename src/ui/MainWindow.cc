@@ -409,7 +409,7 @@ void MainWindow::storeSettings()
 
 void MainWindow::configureWindowName()
 {
-    setWindowTitle(qApp->applicationName() + " " + qApp->applicationVersion());
+    setWindowTitle(qApp->applicationName()); //qApp->applicationVersion()
 }
 
 /**
