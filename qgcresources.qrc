@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/localization">
+        <file alias="qgc_ko_KR.qm">localization/qgc_ko-KR.qm</file>
         <file alias="qgc_zh_CN.qm">localization/qgc_zh-CN.qm</file>
         <file alias="qgc_de_DE.qm">localization/qgc_de-DE.qm</file>
         <file alias="qgc_tr.qm">localization/qgc_tr.qm</file>

@@ -173,9 +173,9 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     _app = this;
 
 
-    QLocale locale = QLocale::system();
+    //QLocale locale = QLocale::system();
     //-- Some forced locales for testing
-    //QLocale locale = QLocale(QLocale::German);
+    QLocale locale = QLocale(QLocale::Korean);
     //QLocale locale = QLocale(QLocale::French);
     //QLocale locale = QLocale(QLocale::Chinese);
 #if defined (__macos__)
