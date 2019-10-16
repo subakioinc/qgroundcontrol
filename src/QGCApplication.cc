@@ -362,8 +362,6 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
 
     _checkForNewVersion();
 
-    qDebug() << "korean's : "<<toolbox()->settingsManager()->appSettings()->korean()->rawValue().toBool();
-
     _locale = QLocale::system();
     setKorean();
 
@@ -383,11 +381,12 @@ void QGCApplication::setKorean()
 
     if(ko){
         _locale = QLocale(QLocale::Korean);
+    }else {
+        _locale = QLocale(QLocale::English);
     }
 
     qDebug() << "System reported locale:" << _locale << _locale.name();
     //-- Our localization
-     _app->removeTranslator(&_QGCTranslator);
     if(_QGCTranslator.load(_locale, "qgc_", "", ":/localization"))
         _app->installTranslator(&_QGCTranslator);
     emit koreanChanged(_locale);
