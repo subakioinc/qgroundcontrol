@@ -254,8 +254,8 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
         //setApplicationName(QGC_APPLICATION_NAME);
         setApplicationName("Subakio GroundStation (v3.0.0)");
     }
-    setOrganizationName("");
-    setOrganizationDomain("");
+    setOrganizationName(" ");
+    setOrganizationDomain(" ");
 
     this->setApplicationVersion(QString(" "));
     //this->setApplicationVersion(QString("GIT_VERSION"));
