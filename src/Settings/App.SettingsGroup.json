@@ -219,5 +219,13 @@
     "longDescription":  "Enable Taisync Video Support",
     "type":             "bool",
     "defaultValue":     true
+},
+{
+    "name":             "korean",
+    "shortDescription": "Korean",
+    "longDescription":  "Enable Korean Language",
+    "type":             "bool",
+    "defaultValue":     true,
+    "qgcRebootRequired":    true
 }
 ]

@@ -60,6 +60,10 @@ DECLARE_SETTINGGROUP(App, "")
     connect(savePathFact, &Fact::rawValueChanged, this, &AppSettings::savePathsChanged);
     connect(savePathFact, &Fact::rawValueChanged, this, &AppSettings::_checkSavePathDirectories);
     _checkSavePathDirectories();
+
+    SettingsFact* koreanFact = qobject_cast<SettingsFact*>(korean());
+    connect(koreanFact, &Fact::rawValueChanged, this, &AppSettings::_koreanChanged);
+    
 }
 
 DECLARE_SETTINGSFACT(AppSettings, offlineEditingFirmwareType)
@@ -87,6 +91,7 @@ DECLARE_SETTINGSFACT(AppSettings, followTarget)
 DECLARE_SETTINGSFACT(AppSettings, apmStartMavlinkStreams)
 DECLARE_SETTINGSFACT(AppSettings, enableTaisync)
 DECLARE_SETTINGSFACT(AppSettings, enableTaisyncVideo)
+DECLARE_SETTINGSFACT(AppSettings, korean)
 
 DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, indoorPalette)
 {
@@ -95,6 +100,11 @@ DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, indoorPalette)
         connect(_indoorPaletteFact, &Fact::rawValueChanged, this, &AppSettings::_indoorPaletteChanged);
     }
     return _indoorPaletteFact;
+}
+
+void AppSettings::_koreanChanged(void)
+{
+    qgcApp()->setKorean();
 }
 
 void AppSettings::_checkSavePathDirectories(void)
