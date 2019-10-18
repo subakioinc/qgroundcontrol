@@ -172,17 +172,9 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
 {
     _app = this;
 
-
-    //QLocale locale = QLocale::system();
-    
-    //-- Some forced locales for testing
-    QLocale locale = QLocale(QLocale::Korean);
-#if defined (__macos__)
-    locale = QLocale(locale.name());
-#endif
-    qDebug() << "System reported locale:" << locale << locale.name();
+    qDebug() << "System reported locale:" << _locale << _locale.name();
     //-- Our localization
-    if(_QGCTranslator.load(locale, "qgc_", "", ":/localization"))
+    if(_QGCTranslator.load(_locale, "qgc_", "", ":/localization"))
         _app->installTranslator(&_QGCTranslator);
 
     // This prevents usage of QQuickWidget to fail since it doesn't support native widget siblings
@@ -371,6 +363,35 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
 #endif /* __mobile__ */
 
     _checkForNewVersion();
+
+    
+    _locale = QLocale::system();
+    setKorean();
+    
+    //-- Some forced locales for testing
+#if defined (__macos__)
+    locale = QLocale(_locale.name());
+#endif
+
+}
+
+void QGCApplication::setKorean()
+{ 
+
+    bool ko = qgcApp()->toolbox()->settingsManager()->appSettings()->korean()->rawValue().toBool();
+    qDebug() << "korean:" << ko;
+
+    if(ko){
+        _locale = QLocale(QLocale::Korean);
+    }else {
+        _locale = QLocale(QLocale::English);
+    }
+
+    qDebug() << "System reported locale:" << _locale << _locale.name();
+    //-- Our localization
+    if(_QGCTranslator.load(_locale, "qgc_", "", ":/localization"))
+        _app->installTranslator(&_QGCTranslator);
+    emit koreanChanged(_locale);
 }
 
 void QGCApplication::_shutdown(void)

@@ -6388,6 +6388,11 @@ Blue Robotics 추진기는 물로 윤활되고 대기에서 작동하도록 설�
       <translation>언어</translation>
     </message>
     <message>
+      <location filename="../src/ui/preferences/GeneralSettings.qml" line="145"/>
+      <source>Korean</source>
+      <translation>한국어</translation>
+    </message>
+    <message>
       <location filename="../src/ui/preferences/GeneralSettings.qml" line="149"/>
       <source>Color Scheme</source>
       <translation>색 구성</translation>

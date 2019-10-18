@@ -139,7 +139,18 @@ QGCView {
                             GridLayout {
                                 id:                         comboGrid
                                 anchors.horizontalCenter:   parent.horizontalCenter
-                                columns:                    2
+                                columns:   2
+                                
+                                QGCLabel {
+                                    text:           qsTr("Language")
+                                    visible: QGroundControl.settingsManager.appSettings.korean.visible
+                                }
+                                FactCheckBox {
+                                    text:       qsTr("Korean")
+                                    fact:       _korean
+                                    visible:    _korean.visible
+                                    property Fact _korean: QGroundControl.settingsManager.appSettings.korean
+                                }    
 
                                 QGCLabel {
                                     text:           qsTr("Color Scheme")
