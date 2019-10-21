@@ -58,7 +58,7 @@ QGCView {
 
                     QGCLabel {
                         id:         loginLabel
-                        text:       qsTr("Login")
+                        text:       qsTr("Naver 지도 사용자 ")
                     }
                     Rectangle {
                         Layout.preferredHeight: loginCol.height + (_margins * 2)
@@ -75,19 +75,22 @@ QGCView {
                             spacing:                    _margins
 
                             GridLayout {
-                                
                                 columns: 2
 
-                                QGCLabel { text: qsTr("Guided Minimum Altitude") }
+                                QGCLabel { text: qsTr("ID                ") }
                                 TextField {
-                                    Layout.preferredWidth:  _valueFieldWidth
-                                    fact:                   QGroundControl.settingsManager.flyViewSettings.guidedMinimumAltitude
+                                    Layout.preferredWidth:  _valueFieldWidths
+                                    placeholderText: qsTr("Enter your ID")
                                 }
 
-                                QGCLabel { text: qsTr("Guided Maximum Altitude") }
-                                FactTextField {
+                                QGCLabel { text: qsTr("Password           ") }
+                                TextField {
                                     Layout.preferredWidth:  _valueFieldWidth
-                                    fact:                   QGroundControl.settingsManager.flyViewSettings.guidedMaximumAltitude
+                                    placeholderText: qsTr("Enter your passwords")
+                                }
+
+                                QGCButton {
+                                    text: "Login"
                                 }
                             }
                         }
