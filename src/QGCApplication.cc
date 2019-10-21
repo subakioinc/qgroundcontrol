@@ -172,20 +172,6 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
 {
     _app = this;
 
-
-    QLocale locale = QLocale::system();
-    //-- Some forced locales for testing
-    //QLocale locale = QLocale(QLocale::German);
-    //QLocale locale = QLocale(QLocale::French);
-    //QLocale locale = QLocale(QLocale::Chinese);
-#if defined (__macos__)
-    locale = QLocale(locale.name());
-#endif
-    qDebug() << "System reported locale:" << locale << locale.name();
-    //-- Our localization
-    if(_QGCTranslator.load(locale, "qgc_", "", ":/localization"))
-        _app->installTranslator(&_QGCTranslator);
-
     // This prevents usage of QQuickWidget to fail since it doesn't support native widget siblings
 #ifndef __android__
     setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
@@ -269,7 +255,7 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     setOrganizationName(QGC_ORG_NAME);
     setOrganizationDomain(QGC_ORG_DOMAIN);
 
-    this->setApplicationVersion(QString(GIT_VERSION));
+    this->setApplicationVersion(QString("v3.0.0"));
 
     // Set settings format
     QSettings::setDefaultFormat(QSettings::IniFormat);
@@ -372,6 +358,34 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
 #endif /* __mobile__ */
 
     _checkForNewVersion();
+
+    _locale = QLocale::system();
+    setKorean();
+
+#if defined (__macos__)
+     _locale = QLocale(_locale.name());
+
+#endif
+    qDebug() << "System reported locale:" << _locale << _locale.name();
+}
+
+void QGCApplication::setKorean()
+{ 
+
+    bool ko = qgcApp()->toolbox()->settingsManager()->appSettings()->korean()->rawValue().toBool();
+    qDebug() << "korean:" << ko;
+
+    if(ko){
+        _locale = QLocale(QLocale::Korean);
+    }else {
+        _locale = QLocale(QLocale::English);
+    }
+
+    qDebug() << "System reported locale:" << _locale << _locale.name();
+    //-- Our localization
+    if(_QGCTranslator.load(_locale, "qgc_", "", ":/localization"))
+        _app->installTranslator(&_QGCTranslator);
+    emit koreanChanged(_locale);
 }
 
 void QGCApplication::_shutdown(void)
@@ -796,16 +810,16 @@ void QGCApplication::_currentVersionDownloadFinished(QString remoteFile, QString
         QTextStream textStream(&versionFile);
         QString version = textStream.readLine();
 
-        qDebug() << version;
+        qDebug() <<"Origin QGC version : "<< version;
 
-        int majorVersion, minorVersion, buildVersion;
-        if (_parseVersionText(version, majorVersion, minorVersion, buildVersion)) {
-            if (_majorVersion < majorVersion ||
-                    (_majorVersion == majorVersion && _minorVersion < minorVersion) ||
-                    (_majorVersion == majorVersion && _minorVersion == minorVersion && _buildVersion < buildVersion)) {
-                QGCMessageBox::information(tr("New Version Available"), tr("There is a newer version of %1 available. You can download it from %2.").arg(applicationName()).arg(toolbox()->corePlugin()->stableDownloadLocation()));
-            }
-        }
+        // int majorVersion, minorVersion, buildVersion;
+        // if (_parseVersionText(version, majorVersion, minorVersion, buildVersion)) {
+        //     if (_majorVersion < majorVersion ||
+        //             (_majorVersion == majorVersion && _minorVersion < minorVersion) ||
+        //             (_majorVersion == majorVersion && _minorVersion == minorVersion && _buildVersion < buildVersion)) {
+        //         QGCMessageBox::information(tr("New Version Available"), tr("There is a newer version of %1 available. You can download it from %2.").arg(applicationName()).arg(toolbox()->corePlugin()->stableDownloadLocation()));
+        //     }
+        // }
     }
 
     _currentVersionDownload->deleteLater();

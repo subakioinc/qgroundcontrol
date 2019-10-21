@@ -142,6 +142,18 @@ QGCView {
                                 columns:                    2
 
                                 QGCLabel {
+                                    text:           qsTr("Language")
+                                    visible: QGroundControl.settingsManager.appSettings.korean.visible
+                                }
+                                
+                                FactCheckBox {
+                                    text:       qsTr("Korean")
+                                    fact:       _korean
+                                    visible:    _korean.visible
+                                    property Fact _korean: QGroundControl.settingsManager.appSettings.korean
+                                }                                
+
+                                QGCLabel {
                                     text:           qsTr("Color Scheme")
                                     visible: QGroundControl.settingsManager.appSettings.indoorPalette.visible
                                 }

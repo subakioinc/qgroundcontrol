@@ -1,0 +1,26 @@
+[
+    {
+        "name":             "pf1",
+        "shortDescription": "PF1",
+        "type":             "double",
+        "decimalPlaces":    2
+    },
+    {
+        "name":             "pf2",
+        "shortDescription": "PF2",
+        "type":             "double",
+        "decimalPlaces":    2
+    },
+    {
+        "name":             "temp",
+        "shortDescription": "Temperature",
+        "type":             "double",
+        "decimalPlaces":    1
+    },
+    {
+        "name":             "hum",
+        "shortDescription": "Humidity",
+        "type":             "double",
+        "decimalPlaces":    1
+    }
+]

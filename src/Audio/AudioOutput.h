@@ -27,6 +27,7 @@ public:
 
     static bool     getMillisecondString    (const QString& string, QString& match, int& number);
     static QString  fixTextMessageForAudio  (const QString& string);
+    void _setKorean();
 
 public slots:
     bool            say                     (const QString& text);

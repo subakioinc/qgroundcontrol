@@ -85,6 +85,8 @@ const char* Vehicle::_temperatureFactGroupName =        "temperature";
 const char* Vehicle::_clockFactGroupName =              "clock";
 const char* Vehicle::_distanceSensorFactGroupName =     "distanceSensor";
 const char* Vehicle::_estimatorStatusFactGroupName =    "estimatorStatus";
+const char* Vehicle::_gasFactGroupName =                "gas";
+
 
 // Standard connected vehicle
 Vehicle::Vehicle(LinkInterface*             link,
@@ -211,6 +213,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _clockFactGroup(this)
     , _distanceSensorFactGroup(this)
     , _estimatorStatusFactGroup(this)
+    , _gasFactGroup(this)
 {
     connect(_joystickManager, &JoystickManager::activeJoystickChanged, this, &Vehicle::_loadSettings);
     connect(qgcApp()->toolbox()->multiVehicleManager(), &MultiVehicleManager::activeVehicleAvailableChanged, this, &Vehicle::_loadSettings);
@@ -410,6 +413,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _vibrationFactGroup(this)
     , _clockFactGroup(this)
     , _distanceSensorFactGroup(this)
+    , _gasFactGroup(this)
 {
     _commonInit();
 
@@ -489,6 +493,7 @@ void Vehicle::_commonInit(void)
     _addFactGroup(&_clockFactGroup,             _clockFactGroupName);
     _addFactGroup(&_distanceSensorFactGroup,    _distanceSensorFactGroupName);
     _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
+    _addFactGroup(&_gasFactGroup,               _gasFactGroupName);
 
     // Add firmware-specific fact groups, if provided
     QMap<QString, FactGroup*>* fwFactGroups = _firmwarePlugin->factGroups();
@@ -816,6 +821,9 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         _handleWind(message);
         break;
 #endif
+    case MAVLINK_MSG_ID_OPTICAL_FLOW_RAD : 
+         _handleGas(message);
+         break;
     }
 
     // This must be emitted after the vehicle processes the message. This way the vehicle state is up to date when anyone else
@@ -1252,6 +1260,18 @@ void Vehicle::_handleAltitude(mavlink_message_t& message)
             _altitudeAMSLFact.setRawValue(altitude.altitude_amsl);
         }
     }
+}
+
+void Vehicle::_handleGas(mavlink_message_t& message)
+{
+    mavlink_optical_flow_rad_t gas;
+    mavlink_msg_optical_flow_rad_decode(&message, &gas);
+
+    _gasFactGroup._pf1Fact.setRawValue(gas.integrated_x); 
+    _gasFactGroup._pf2Fact.setRawValue(gas.integrated_y);
+    _gasFactGroup._tempFact.setRawValue(gas.integrated_xgyro);
+    _gasFactGroup._humFact.setRawValue(gas.integrated_ygyro); 
+
 }
 
 void Vehicle::_setCapabilities(uint64_t capabilityBits)
@@ -3535,6 +3555,32 @@ VehicleGPSFactGroup::VehicleGPSFactGroup(QObject* parent)
     _hdopFact.setRawValue(std::numeric_limits<float>::quiet_NaN());
     _vdopFact.setRawValue(std::numeric_limits<float>::quiet_NaN());
     _courseOverGroundFact.setRawValue(std::numeric_limits<float>::quiet_NaN());
+}
+
+
+const char* VehicleGasFactGroup::_pf1FactName  =     "pf1";
+const char* VehicleGasFactGroup::_pf2FactName  =     "pf2";
+const char* VehicleGasFactGroup::_tempFactName =     "temp";
+const char* VehicleGasFactGroup::_humFactName  =     "hum";
+
+VehicleGasFactGroup::VehicleGasFactGroup(QObject* parent)
+    : FactGroup(1000, ":/json/Vehicle/GasFact.json", parent)
+    , _pf1Fact            (0, _pf1FactName,        FactMetaData::valueTypeDouble)
+    , _pf2Fact            (0, _pf2FactName,        FactMetaData::valueTypeDouble)
+    , _tempFact           (0, _tempFactName,       FactMetaData::valueTypeDouble)
+    , _humFact            (0, _humFactName,        FactMetaData::valueTypeDouble)
+
+{
+    _addFact(&_pf1Fact,         _pf1FactName);
+    _addFact(&_pf2Fact,         _pf2FactName);
+    _addFact(&_tempFact,        _tempFactName);
+    _addFact(&_humFact,         _humFactName);
+
+    _pf1Fact.setRawValue(std::numeric_limits<double>::quiet_NaN());
+    _pf2Fact.setRawValue(std::numeric_limits<double>::quiet_NaN());
+    _tempFact.setRawValue(std::numeric_limits<double>::quiet_NaN());
+    _humFact.setRawValue(std::numeric_limits<double>::quiet_NaN());
+    
 }
 
 void Vehicle::startMavlinkLog()

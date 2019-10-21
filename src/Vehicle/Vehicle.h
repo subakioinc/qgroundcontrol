@@ -483,6 +483,35 @@ private:
 #endif
 };
 
+class VehicleGasFactGroup : public FactGroup
+{
+    Q_OBJECT
+
+public:
+    VehicleGasFactGroup(QObject* parent = nullptr);
+
+    Q_PROPERTY(Fact* pf1      READ pf1      CONSTANT)
+    Q_PROPERTY(Fact* pf2      READ pf2      CONSTANT)
+    Q_PROPERTY(Fact* temp    READ temp    CONSTANT)
+    Q_PROPERTY(Fact* hum     READ hum     CONSTANT)
+
+    Fact* pf1            (void) { return &_pf1Fact; }
+    Fact* pf2            (void) { return &_pf2Fact; }
+    Fact* temp          (void) { return &_tempFact; }
+    Fact* hum           (void) { return &_humFact; }
+
+    static const char* _pf1FactName;
+    static const char* _pf2FactName;
+    static const char* _tempFactName;
+    static const char* _humFactName;
+
+public:
+    Fact        _pf1Fact;
+    Fact        _pf2Fact;
+    Fact        _tempFact;
+    Fact        _humFact;
+};
+
 
 class Vehicle : public FactGroup
 {
@@ -675,6 +704,7 @@ public:
     Q_PROPERTY(FactGroup* clock             READ clockFactGroup             CONSTANT)
     Q_PROPERTY(FactGroup* setpoint          READ setpointFactGroup          CONSTANT)
     Q_PROPERTY(FactGroup* estimatorStatus   READ estimatorStatusFactGroup   CONSTANT)
+    Q_PROPERTY(FactGroup* gas               READ gasFactGroup               CONSTANT)
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -964,6 +994,7 @@ public:
     FactGroup* setpointFactGroup        (void) { return &_setpointFactGroup; }
     FactGroup* distanceSensorFactGroup  (void) { return &_distanceSensorFactGroup; }
     FactGroup* estimatorStatusFactGroup (void) { return &_estimatorStatusFactGroup; }
+    FactGroup* gasFactGroup             (void)  {return &_gasFactGroup; }
 
     void setConnectionLostEnabled(bool connectionLostEnabled);
 
@@ -1261,6 +1292,7 @@ private:
 #if !defined(NO_ARDUPILOT_DIALECT)
     void _handleCameraFeedback(const mavlink_message_t& message);
     void _handleWind(mavlink_message_t& message);
+    void _handleGas(mavlink_message_t& message);
 #endif
     void _handleCameraImageCaptured(const mavlink_message_t& message);
     void _handleADSBVehicle(const mavlink_message_t& message);
@@ -1495,6 +1527,7 @@ private:
     VehicleSetpointFactGroup        _setpointFactGroup;
     VehicleDistanceSensorFactGroup  _distanceSensorFactGroup;
     VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
+    VehicleGasFactGroup             _gasFactGroup;
 
     static const char* _rollFactName;
     static const char* _pitchFactName;
@@ -1523,6 +1556,7 @@ private:
     static const char* _clockFactGroupName;
     static const char* _distanceSensorFactGroupName;
     static const char* _estimatorStatusFactGroupName;
+    static const char* _gasFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs = 100;
 

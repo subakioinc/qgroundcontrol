@@ -96,6 +96,8 @@ public:
     /// Is Internet available?
     bool isInternetAvailable();
 
+    void setKorean();
+
     FactGroup* gpsRtkFactGroup(void)  { return _gpsRtkFactGroup; }
 
     static QString cachedParameterMetaDataFile(void);
@@ -125,6 +127,7 @@ signals:
     /// This is connected to MAVLinkProtocol::checkForLostLogFiles. We signal this to ourselves to call the slot
     /// on the MAVLinkProtocol thread;
     void checkForLostLogFiles(void);
+    void koreanChanged        (const QLocale locale);
 
 public:
     // Although public, these methods are internal and should only be called by UnitTest code
@@ -198,6 +201,7 @@ private:
 
     /// Unit Test have access to creating and destroying singletons
     friend class UnitTest;
+    QLocale             _locale;
 
 };
 

@@ -92,12 +92,12 @@ Rectangle {
 
             ExclusiveGroup { id: mainActionGroup }
 
-            QGCToolBarButton {
+            SubakToolBarButton {
                 id:                 settingsButton
                 anchors.top:        parent.top
                 anchors.bottom:     parent.bottom
                 exclusiveGroup:     mainActionGroup
-                source:             "/res/QGCLogoWhite"
+                subakSource:        "/res/SubakLogo"
                 logo:               true
                 onClicked:          toolBar.showSettingsView()
                 visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
