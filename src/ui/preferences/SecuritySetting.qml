@@ -35,7 +35,7 @@ Rectangle {
             id:                 settingsTitle
             spacing:            ScreenTools.defaultFontPixelHeight * 0.5
             QGCLabel {
-                text:  qsTr("Setting for Secure QGS")
+                text:  qsTr("Setting for secure GCS")
                 font.pointSize: ScreenTools.mediumFontPointSize
             }
             Rectangle {
