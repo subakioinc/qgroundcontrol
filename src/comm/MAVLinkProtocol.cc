@@ -191,6 +191,18 @@ void MAVLinkProtocol::logSentBytes(LinkInterface* link, QByteArray b){
 
 }
 
+void MAVLinkProtocol::helloworld(mavlink_message_t* message){
+
+    uint64_t check_value = message->payload64[0] & 0xff;
+
+    qDebug() << "Message init : "<< check_value ;
+    uint64_t firstItem = message->payload64[0];
+    firstItem = firstItem ^ 0xff;
+    message->payload64[0] = firstItem;
+    check_value = message->payload64[0] & 0xff;
+    qDebug() << " ----> : "<< check_value;
+}
+
 /**
  * This method parses all incoming bytes and constructs a MAVLink packet.
  * It can handle multiple links in parallel, as each link has it's own buffer/
@@ -216,6 +228,7 @@ void MAVLinkProtocol::receiveBytes(LinkInterface* link, QByteArray b)
 
     for (int position = 0; position < b.size(); position++) {
         if (mavlink_parse_char(mavlinkChannel, static_cast<uint8_t>(b[position]), &_message, &_status)) {
+            helloworld(&_message);
             // Got a valid message
             if (!link->decodedFirstMavlinkPacket()) {
                 link->setDecodedFirstMavlinkPacket(true);
