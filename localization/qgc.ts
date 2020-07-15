@@ -7891,6 +7891,19 @@ Click the Next button to upload calibration to board. Click Cancel if you don&ap
     </message>
 </context>
 <context>
+    <name>SecuritySetting</name>
+    <message>
+        <location filename="../src/ui/preferences/SecuritySetting.qml" line="39"/>
+        <source>Setting for secure GCS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/SecuritySetting.qml" line="57"/>
+        <source>Using Sercure QGS</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LogCompressor</name>
     <message>
         <location filename="../src/LogCompressor.cc" line="50"/>

@@ -7907,6 +7907,19 @@ Click the Next button to upload calibration to board. Click Cancel if you don&ap
     </message>
   </context>
   <context>
+    <name>SecuritySetting</name>
+    <message>
+      <location filename="../src/ui/preferences/SecuritySetting.qml" line="39"/>
+      <source>Setting for secure GCS</source>
+      <translation>보안통신 설정</translation>
+    </message>
+    <message>
+      <location filename="../src/ui/preferences/SecuritySetting.qml" line="57"/>
+      <source>Using Sercure QGS</source>
+      <translation>보안 통신 사용하기</translation>
+    </message>
+  </context>
+  <context>
     <name>LogCompressor</name>
     <message>
       <location filename="../src/LogCompressor.cc" line="50"/>
@@ -11637,6 +11650,11 @@ sudo apt-get remove modemmanager</translation>
       <location filename="../src/api/QGCCorePlugin.cc" line="156"/>
       <source>AirMap</source>
       <translation>영공 지도</translation>
+    </message>
+    <message>
+      <location filename="../src/api/QGCCorePlugin.cc" line="161"/>
+      <source>Security</source>
+      <translation>보안</translation>
     </message>
     <message>
       <location filename="../src/api/QGCCorePlugin.cc" line="161"/>
