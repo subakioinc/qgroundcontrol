@@ -42,7 +42,7 @@ Rectangle {
                 height: 1
                 width:  settingsRect.width
                 color:  qgcPal.button
-                }
+            }
         }
 
         ColumnLayout {
@@ -51,9 +51,19 @@ Rectangle {
             anchors.top:        settingsTitle.bottom
             spacing:            ScreenTools.defaultFontPixelHeight
 
+            property bool security: QGroundControl.settingsManager.appSettings.security.rawValue
+
             QGCCheckBox {
-                id:             sendStatusText
-                text:           qsTr("Using Sercure QGS")
+                text:               qsTr("Using Sercure QGS")
+                checked:            column.security
+                onClicked: {
+                    if(checked) {
+                        QGroundControl.settingsManager.appSettings.security.rawValue = true
+                    }else {
+                        QGroundControl.settingsManager.appSettings.security.rawValue = false
+                    }
+                    
+                }
             }
         }
 
