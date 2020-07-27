@@ -17,69 +17,59 @@ import QGroundControl.Controls      1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 
-Rectangle {
-    color:          qgcPal.window
-    anchors.fill:   parent
-
-    readonly property real _margins: ScreenTools.defaultFontPixelHeight
-
-    QGCPalette { id: qgcPal; colorGroupEnabled: true }
-
-    QGCFlickable {
+Item {
+    Rectangle {
+        color:          qgcPal.window
         anchors.fill:   parent
-        contentWidth:   column.width  + (_margins * 2)
-        contentHeight:  column.height + (_margins * 2)
-        clip:           true
 
-        Column {
-            id:                 settingsTitle
-            spacing:            ScreenTools.defaultFontPixelHeight * 0.5
-            QGCLabel {
-                text:  qsTr("Setting for secure GCS")
-                font.pointSize: ScreenTools.mediumFontPointSize
-            }
-            Rectangle {
-                height: 1
-                width:  settingsRect.width
-                color:  qgcPal.button
-            }
-        }
+        QGCPalette { id: qgcPal; colorGroupEnabled: true }
 
-        ColumnLayout {
-            id:                 column
-            anchors.margins:    _margins
-            anchors.top:        settingsTitle.bottom
-            spacing:            ScreenTools.defaultFontPixelHeight
+        QGCFlickable {
+            anchors.fill:   parent
+            clip:           true
 
-            property bool security: QGroundControl.settingsManager.appSettings.security.rawValue
-
-            QGCCheckBox {
-                text:               qsTr("Using Sercure QGS")
-                checked:            column.security
-                onClicked: {
-                    if(checked) {
-                        QGroundControl.settingsManager.appSettings.security.rawValue = true
-                    }else {
-                        QGroundControl.settingsManager.appSettings.security.rawValue = false
-                    }
-                    
+            Column {
+                id:                 settingsTitle
+                spacing:            ScreenTools.defaultFontPixelHeight * 0.5
+                QGCLabel {
+                    text:  qsTr("Setting for secure GCS")
+                    font.pointSize: ScreenTools.mediumFontPointSize
                 }
             }
-        }
 
-        Image {
-            id:                 vehicleIcon
-            source:             "/qmlimages/AwarenessAircraft.svg"
-            mipmap:             true
-            width:              size
-            sourceSize.width:   size
-            fillMode:           Image.PreserveAspectFit
-            anchors.left:              parent.right
-            transform: Rotation {
-                origin.x:       vehicleIcon.width  / 2
-                origin.y:       vehicleIcon.height / 2
-                angle:          isNaN(heading) ? 0 : heading
+            ColumnLayout {
+                id:                 column
+                anchors.top:        settingsTitle.bottom
+                spacing:            ScreenTools.defaultFontPixelHeight
+                anchors.margins:    15
+
+                property bool security: QGroundControl.settingsManager.appSettings.security.rawValue
+
+                QGCCheckBox {
+                    text:               qsTr("Using Sercure QGS")
+                    checked:            column.security
+                    onClicked: {
+                        if(checked) {
+                            QGroundControl.settingsManager.appSettings.security.rawValue = true
+                        }else {
+                            QGroundControl.settingsManager.appSettings.security.rawValue = false
+                        }
+                        
+                    }
+                }
             }
+
         }
     }
+
+    Image {
+        id:                 vehicleIcon
+        source:             "/qmlimages/AwarenessAircraft.svg"
+        mipmap:             true
+        fillMode:           Image.PreserveAspectFit
+        anchors.right:      parent.right
+        anchors.bottom:     parent.bottom
+    }
 }
+
+
