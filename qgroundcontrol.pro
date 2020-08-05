@@ -683,6 +683,7 @@ HEADERS += \
     src/comm/TCPLink.h \
     src/comm/UDPLink.h \
     src/comm/UdpIODevice.h \
+    src/comm/NeowineCRC.h \
     src/uas/UAS.h \
     src/uas/UASInterface.h \
     src/uas/UASMessageHandler.h \
@@ -886,6 +887,7 @@ SOURCES += \
     src/comm/TCPLink.cc \
     src/comm/UDPLink.cc \
     src/comm/UdpIODevice.cc \
+    src/comm/NeowineCRC.cc \
     src/main.cc \
     src/uas/UAS.cc \
     src/uas/UASMessageHandler.cc \

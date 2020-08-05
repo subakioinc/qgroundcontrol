@@ -78,7 +78,6 @@ public:
     virtual void setToolbox(QGCToolbox *toolbox);
 
     void helloworld(mavlink_message_t* message);
-
 public slots:
     /** @brief Receive bytes from a communication interface */
     void receiveBytes(LinkInterface* link, QByteArray b);
@@ -172,5 +171,8 @@ private:
 
     LinkManager*            _linkMgr;
     MultiVehicleManager*    _multiVehicleManager;
+
+
+    
 };
 

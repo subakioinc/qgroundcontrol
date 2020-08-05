@@ -38,6 +38,7 @@
 #include "QGCLoggingCategory.h"
 #include "MultiVehicleManager.h"
 #include "SettingsManager.h"
+#include "NeowineCRC.h"
 
 Q_DECLARE_METATYPE(mavlink_message_t)
 
@@ -203,6 +204,7 @@ void MAVLinkProtocol::helloworld(mavlink_message_t* message){
     qDebug() << " ----> : "<< check_value;
 }
 
+
 /**
  * This method parses all incoming bytes and constructs a MAVLink packet.
  * It can handle multiple links in parallel, as each link has it's own buffer/
@@ -231,7 +233,8 @@ void MAVLinkProtocol::receiveBytes(LinkInterface* link, QByteArray b)
             bool security = qgcApp()->toolbox()->settingsManager()->appSettings()->security()->rawValue().toBool();
             if(security){
                 qDebug() << "Security turn on!!!!!!====================>";
-                helloworld(&_message);
+                NeowineCRC neowineCRC = NeowineCRC();
+                neowineCRC.decrypt(&_message);
             }
             
             // Got a valid message
