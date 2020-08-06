@@ -234,17 +234,6 @@ NeowineCRC::NeowineCRC()
 
 void NeowineCRC::encrypt_and_crcupdate(mavlink_message_t *msg)
 {
-	// crcs[36] = 222;
-	// crcs[83] = 22;
-	// crcs[111] = 34;
-	// crcs[140] = 181;
-	// crcs[141] = 47;
-	// crcs[231] = 105;
-	// crcs[245] = 130;
-	// crcs[331] = 91;
-	//printf("처음 : msg->payload64, msg->crc : %lld , %d \n", msg->payload64[0], msg->checksum);
-	//uint64_t check_value = msg->payload64[0] & 0xff;
-	//printf("메시지 초기값 : %lld", check_value);
 	uint16_t init_checksum = msg->checksum;
 	uint64_t firstItem = msg->payload64[0];
 	firstItem = firstItem ^ 0xff;
@@ -255,17 +244,6 @@ void NeowineCRC::encrypt_and_crcupdate(mavlink_message_t *msg)
 
 void NeowineCRC::decrypt(mavlink_message_t *msg)
 {
-	// crcs[36] = 222;
-	// crcs[83] = 22;
-	// crcs[111] = 34;
-	// crcs[140] = 181;
-	// crcs[141] = 47;
-	// crcs[231] = 105;
-	// crcs[245] = 130;
-	// crcs[331] = 91;
-	//printf("처음 : msg->payload64, msg->crc : %lld , %d \n", msg->payload64[0], msg->checksum);
-	//uint64_t check_value = msg->payload64[0] & 0xff;
-	//printf("메시지 초기값 : %lld", check_value);
 	uint16_t init_checksum = msg->checksum;
 	uint64_t firstItem = msg->payload64[0];
 	firstItem = firstItem ^ 0xff;

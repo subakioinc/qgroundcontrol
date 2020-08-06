@@ -390,10 +390,13 @@ void MultiVehicleManager::_sendGCSHeartbeat(void)
                                             MAV_MODE_MANUAL_ARMED,   // MAV_MODE
                                             0,                       // custom mode
                                             MAV_STATE_ACTIVE);       // MAV_STATE
-                                
-
-            NeowineCRC neowineCRC;
+                            
+            bool security = qgcApp()->toolbox()->settingsManager()->appSettings()->security()->rawValue().toBool();
+            if(security){
+            NeowineCRC neowineCRC = NeowineCRC();
             neowineCRC.encrypt_and_crcupdate(&message);
+            }
+
             uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
             int len = mavlink_msg_to_send_buffer(buffer, &message);
 

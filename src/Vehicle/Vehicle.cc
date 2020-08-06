@@ -2013,9 +2013,12 @@ void Vehicle::_sendMessageOnLink(LinkInterface* link, mavlink_message_t message)
     mavlink_status_t* mavlinkStatus = mavlink_get_channel_status(link->mavlinkChannel());
     qDebug() << "_sendMessageOnLink" << mavlinkStatus << link->mavlinkChannel() << mavlinkStatus->flags << message.magic;
 #endif
-    
-    NeowineCRC neowineCRC = NeowineCRC();
-    neowineCRC.encrypt_and_crcupdate(&message);
+
+    bool security = qgcApp()->toolbox()->settingsManager()->appSettings()->security()->rawValue().toBool();
+    if(security){
+        NeowineCRC neowineCRC = NeowineCRC();
+        neowineCRC.encrypt_and_crcupdate(&message);
+    }
 
     // Give the plugin a chance to adjust
     _firmwarePlugin->adjustOutgoingMavlinkMessage(this, link, &message);
