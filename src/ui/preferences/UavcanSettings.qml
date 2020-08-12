@@ -18,50 +18,6 @@ import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 
 Item {
-    // Rectangle {
-    //     color:          qgcPal.window
-    //     anchors.fill:   parent
-
-    //     QGCPalette { id: qgcPal; colorGroupEnabled: true }
-
-    //     QGCFlickable {
-    //         anchors.fill:   parent
-    //         clip:           true
-
-    //         Column {
-    //             id:                 settingsTitle
-    //             spacing:            ScreenTools.defaultFontPixelHeight * 0.5
-    //             QGCLabel {
-    //                 text:  qsTr("Setting for secure GCS")
-    //                 font.pointSize: ScreenTools.mediumFontPointSize
-    //             }
-    //         }
-
-    //         ColumnLayout {
-    //             id:                 column
-    //             anchors.top:        settingsTitle.bottom
-    //             spacing:            ScreenTools.defaultFontPixelHeight
-    //             anchors.margins:    15
-
-    //             property bool security: QGroundControl.settingsManager.appSettings.security.rawValue
-
-    //             QGCCheckBox {
-    //                 text:               qsTr("Using Sercure QGS")
-    //                 checked:            column.security
-    //                 onClicked: {
-    //                     if(checked) {
-    //                         QGroundControl.settingsManager.appSettings.security.rawValue = true
-    //                     }else {
-    //                         QGroundControl.settingsManager.appSettings.security.rawValue = false
-    //                     }
-                        
-    //                 }
-    //             }
-    //         }
-
-    //     }
-    // }
-
     Image {
         id:                 vehicleIcon
         source:             "/qmlimages/x500.svg"
@@ -70,6 +26,15 @@ Item {
         anchors.top:        parent.left
         // anchors.bottom:     parent.bottom
     }
+
+    UavcanButton{
+    id: cbutton
+    anchors.leftMargin:     35 * ScreenTools.defaultFontPixelWidth
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.topMargin: 8.5 * ScreenTools.defaultFontPixelHeight
+    
+}
 }
 
 

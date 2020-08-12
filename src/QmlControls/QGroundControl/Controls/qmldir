@@ -89,6 +89,7 @@ SurveyMapVisuals        1.0 SurveyMapVisuals.qml
 TransectStyleComplexItemStats 1.0 TransectStyleComplexItemStats.qml
 TransectStyleMapVisuals 1.0 TransectStyleMapVisuals.qml
 ToolStrip               1.0 ToolStrip.qml
+UavcanButton            1.0 UavcanButton.qml
 VehicleRotationCal      1.0 VehicleRotationCal.qml
 VehicleSummaryRow       1.0 VehicleSummaryRow.qml
 ViewWidget              1.0 ViewWidget.qml
