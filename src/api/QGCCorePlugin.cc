@@ -73,6 +73,7 @@ public:
     QmlComponentInfo* pGeneral                  = nullptr;
     QmlComponentInfo* pCommLinks                = nullptr;
     QmlComponentInfo* pOfflineMaps              = nullptr;
+    QmlComponentInfo* pUavcan                   = nullptr;
 #if defined(QGC_GST_TAISYNC_ENABLED)
     QmlComponentInfo* pTaisync                  = nullptr;
 #endif
@@ -223,6 +224,9 @@ QVariantList &QGCCorePlugin::settingsPages()
             QUrl::fromUserInput("qrc:/qml/OfflineMap.qml"),
             QUrl::fromUserInput("qrc:/res/waves.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pOfflineMaps)));
+        _p->pUavcan = new QmlComponentInfo(tr("UAVCAN"),
+            QUrl::fromUserInput("qrc:/qml/UavcanSettings.qml"));
+        _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pUavcan)));
 #if defined(QGC_GST_TAISYNC_ENABLED)
         _p->pTaisync = new QmlComponentInfo(tr("Taisync"),
             QUrl::fromUserInput("qrc:/qml/TaisyncSettings.qml"),
