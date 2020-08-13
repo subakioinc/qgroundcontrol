@@ -20,7 +20,7 @@ import QGroundControl.ScreenTools   1.0
 Item {
     Image {
         id:                 vehicleIcon
-        source:             "/qmlimages/x500.svg"
+        source:             "/qmlimages/x500.png"
         mipmap:             true
         fillMode:           Image.PreserveAspectFit
         anchors.top:        parent.left
@@ -28,13 +28,37 @@ Item {
     }
 
     UavcanButton{
-    id: cbutton
-    anchors.leftMargin:     35 * ScreenTools.defaultFontPixelWidth
-    anchors.left: parent.left
-    anchors.top: parent.top
-    anchors.topMargin: 8.5 * ScreenTools.defaultFontPixelHeight
-    
-}
+        id: statusBtn3
+        anchors.leftMargin:     35 * ScreenTools.defaultFontPixelWidth
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
+    }
+
+    UavcanButton{
+        id: statusBtn1
+        anchors.leftMargin:     87 * ScreenTools.defaultFontPixelWidth
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
+    }
+
+    UavcanButton{
+        id: statusBtn2
+        anchors.leftMargin:     23 * ScreenTools.defaultFontPixelWidth
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.topMargin: 18 * ScreenTools.defaultFontPixelHeight
+    }
+
+    UavcanButton{
+        id: statusBtn4
+        anchors.leftMargin:     90 * ScreenTools.defaultFontPixelWidth
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.topMargin: 19 * ScreenTools.defaultFontPixelHeight
+        complete: true
+    }
 }
 
 

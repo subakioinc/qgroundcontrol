@@ -27,6 +27,9 @@ Button {
             border.width:   0
             border.color:   qgcPal.buttonText
         }
+
+        property bool   complete:   false
+
         contentItem: Row{
             anchors.centerIn:   parent
             anchors.margins:    ScreenTools.defaultFontPixelWidth
@@ -34,7 +37,7 @@ Button {
                 width:   sizeLabel.height * 0.5
                 height:  sizeLabel.height * 0.5
                 radius:  width / 2
-                color:   "#31f55b"
+                color:   complete ? "#31f55b" : "#fc5656"
                 opacity: sizeLabel.text.length > 0 ? 1 : 0
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -44,8 +47,8 @@ Button {
             }
             QGCLabel {
                 id : sizeLabel
-                color :  "white"
-                text:   "정상"
+                color : complete ? "white" : "red"
+                text:  complete ?  "정상" : "중지"
                 width:  uavcanButton.width * 0.4
                 anchors.verticalCenter: parent.verticalCenter
             }
