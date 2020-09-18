@@ -308,6 +308,18 @@ Item {
         }
     }
 
+    // Kari - emergency disarm switch button
+    QGCButton {
+        id:                     crashButton
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth * 12
+        anchors.right:          parent.right
+        text:                   qsTr("Crash")
+        primary:                true
+        onClicked:              activeVehicle.emergencyStop()
+        visible:                activeVehicle && !communicationLost
+    }
+
 
     //-------------------------------------------------------------------------
     //-- Waiting for a vehicle
