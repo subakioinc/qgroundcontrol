@@ -684,6 +684,8 @@ HEADERS += \
     src/comm/UDPLink.h \
     src/comm/UdpIODevice.h \
     src/comm/NeowineCRC.h \
+    src/comm/DalpuPayload.h \
+    src/comm/AES128.h \
     src/uas/UAS.h \
     src/uas/UASInterface.h \
     src/uas/UASMessageHandler.h \
@@ -888,6 +890,8 @@ SOURCES += \
     src/comm/UDPLink.cc \
     src/comm/UdpIODevice.cc \
     src/comm/NeowineCRC.cc \
+    src/comm/DalpuPayload.cc \
+    src/comm/AES128.cc \
     src/main.cc \
     src/uas/UAS.cc \
     src/uas/UASMessageHandler.cc \

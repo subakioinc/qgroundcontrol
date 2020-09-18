@@ -2,6 +2,8 @@
 #include <iostream>
 
 #include "NeowineCRC.h"
+#include "DalpuPayload.h"
+#include "AES128.h"
 
 Q_DECLARE_METATYPE(mavlink_message_t)
 
@@ -234,20 +236,46 @@ NeowineCRC::NeowineCRC()
 
 void NeowineCRC::encrypt_and_crcupdate(mavlink_message_t *msg)
 {
-	uint16_t init_checksum = msg->checksum;
-	uint64_t firstItem = msg->payload64[0];
-	firstItem = firstItem ^ 0xff;
-	msg->payload64[0] = firstItem;
-	
+	// uint16_t init_checksum = msg->checksum;
+	// uint64_t firstItem = msg->payload64[0];
+	// firstItem = firstItem ^ 0xff;
+	// msg->payload64[0] = firstItem;
+	DalpuPayload dp(msg->payload64, msg->len);
+
+	if (dp.getTotalChunkBytes() > 0)
+	{
+		aes_create(aes_key, 128);
+				
+		aes_cipher(dp.output, dp.input, ENCRYPTION, dp.getTotalChunkBytes());
+		
+		dp.updateMessage(msg->payload64);
+		//dp.compare_uint8(dp.output, dp.input, dp.getTotalChunkBytes());
+
+		aes_destroy();
+	}
+
 	crcupdate(msg);
 }
 
 void NeowineCRC::decrypt(mavlink_message_t *msg)
 {
-	uint16_t init_checksum = msg->checksum;
-	uint64_t firstItem = msg->payload64[0];
-	firstItem = firstItem ^ 0xff;
-	msg->payload64[0] = firstItem;
+	DalpuPayload dp(msg->payload64, msg->len);
+
+	if (dp.getTotalChunkBytes() > 0)
+	{
+		aes_create(aes_key, 128);
+				
+		aes_cipher(dp.output, dp.input, DECRYPTION, dp.getTotalChunkBytes());
+		
+		dp.updateMessage(msg->payload64);
+
+		aes_destroy();
+	}
+	// uint16_t init_checksum = msg->checksum;
+	// uint64_t firstItem = msg->payload64[0];
+	// firstItem = firstItem ^ 0xff;
+	// msg->payload64[0] = firstItem;
+
 }
 
 
