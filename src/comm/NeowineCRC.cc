@@ -10,6 +10,7 @@ Q_DECLARE_METATYPE(mavlink_message_t)
 
 NeowineCRC::NeowineCRC()
 {
+	totalbyte = 0;
 	using namespace std;
 	crc_map.insert(make_pair( 0  , 50 ));
 	crc_map.insert(make_pair( 1  , 124 ));
@@ -240,8 +241,12 @@ void NeowineCRC::encrypt_and_crcupdate(mavlink_message_t *msg)
 	// uint64_t firstItem = msg->payload64[0];
 	// firstItem = firstItem ^ 0xff;
 	// msg->payload64[0] = firstItem;
-	DalpuPayload dp(msg->payload64, msg->len);
+	uint8_t input[1024] = {0};
+	uint8_t output[1024] = {0};
 
+	DalpuPayload dp(msg->payload64, msg->len);
+	memcpy(input, msg->payload64, msg->len);
+	
 	if (dp.getTotalChunkBytes() > 0)
 	{
 		aes_create(aes_key, 128);
@@ -249,12 +254,21 @@ void NeowineCRC::encrypt_and_crcupdate(mavlink_message_t *msg)
 		aes_cipher(dp.output, dp.input, ENCRYPTION, dp.getTotalChunkBytes());
 		
 		dp.updateMessage(msg->payload64);
-		//dp.compare_uint8(dp.output, dp.input, dp.getTotalChunkBytes());
+
+		// memcpy(output, msg->payload64, msg->len);	
+
+		// DalpuPayload dp2(msg->payload64, msg->len);
+		// aes_cipher(dp2.output, dp2.input, DECRYPTION, dp2.getTotalChunkBytes());
+
+		// memcpy(output, dp2.output, dp2.getTotalChunkBytes());
+		// dp2.compare_uint8(input, output, msg->len);
 
 		aes_destroy();
+		crcupdate(msg);
+		totalbyte = dp.getTotalChunkBytes();
+	} else {
+		//std::cout<<"no Encryption!!"<<std::endl;
 	}
-
-	crcupdate(msg);
 }
 
 void NeowineCRC::decrypt(mavlink_message_t *msg)
@@ -270,7 +284,17 @@ void NeowineCRC::decrypt(mavlink_message_t *msg)
 		dp.updateMessage(msg->payload64);
 
 		aes_destroy();
+		crcupdate(msg);
+
+		// uint8_t input[1024] = {0};
+		// memcpy(input, msg->payload64, (uint32_t)msg->len);
+		// std::cout<<"Size : "<<(uint32_t)msg->len<<" ID: "<<(uint32_t)msg->msgid<< " ";
+		// for(int i=0; i<msg->len; i++){
+		// 	std::cout<<(uint32_t)input[i]<<" ";
+		// }
+		// std::cout<<std::endl;
 	}
+	
 	// uint16_t init_checksum = msg->checksum;
 	// uint64_t firstItem = msg->payload64[0];
 	// firstItem = firstItem ^ 0xff;

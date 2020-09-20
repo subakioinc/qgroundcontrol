@@ -232,7 +232,7 @@ void MAVLinkProtocol::receiveBytes(LinkInterface* link, QByteArray b)
         if (mavlink_parse_char(mavlinkChannel, static_cast<uint8_t>(b[position]), &_message, &_status)) {
             bool security = qgcApp()->toolbox()->settingsManager()->appSettings()->security()->rawValue().toBool();
             if(security){
-                qDebug() << "Security turn on!!!!!!====================>";
+                //qDebug() << "Security turn on!!!!!!====================>";
                 NeowineCRC neowineCRC = NeowineCRC();
                 neowineCRC.decrypt(&_message);
             }

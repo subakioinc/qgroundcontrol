@@ -13,6 +13,8 @@
 #include <QVariantList>
 #include <QGeoCoordinate>
 #include <QTime>
+#include <iostream>
+#include <set>
 
 #include "FactGroup.h"
 #include "LinkInterface.h"
@@ -476,6 +478,8 @@ class Vehicle : public FactGroup
     Q_OBJECT
 
 public:
+    std::set<int> cx_set;
+    std::set<int> px_set;
     Vehicle(LinkInterface*          link,
             int                     vehicleId,
             int                     defaultComponentId,

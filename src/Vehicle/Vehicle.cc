@@ -1995,7 +1995,7 @@ bool Vehicle::sendMessageOnLink(LinkInterface* link, mavlink_message_t message)
     if (!link || !_links.contains(link) || !link->isConnected()) {
         return false;
     }
-
+    
     emit _sendMessageOnLinkOnThread(link, message);
 
     return true;
@@ -2014,15 +2014,27 @@ void Vehicle::_sendMessageOnLink(LinkInterface* link, mavlink_message_t message)
     qDebug() << "_sendMessageOnLink" << mavlinkStatus << link->mavlinkChannel() << mavlinkStatus->flags << message.magic;
 #endif
 
+    // Give the plugin a chance to adjust
+    _firmwarePlugin->adjustOutgoingMavlinkMessage(this, link, &message);
+
+    px_set.insert(message.msgid);
     bool security = qgcApp()->toolbox()->settingsManager()->appSettings()->security()->rawValue().toBool();
     if(security){
         NeowineCRC neowineCRC = NeowineCRC();
         neowineCRC.encrypt_and_crcupdate(&message);
+        if(neowineCRC.totalbyte > 0 ) {
+            cx_set.insert(message.msgid);
+        }
     }
-
-    // Give the plugin a chance to adjust
-    _firmwarePlugin->adjustOutgoingMavlinkMessage(this, link, &message);
-
+/*     std::cout<<"Plain : ";
+    for (auto&& data : px_set) {
+        std::cout << data << " ";
+    }
+    std::cout<<std::endl<<"CX    : ";
+    for (auto&& data : cx_set) {
+        std::cout << data << " ";
+    }    
+    std::cout<<std::endl; */
     // Write message into buffer, prepending start sign
     uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
     int len = mavlink_msg_to_send_buffer(buffer, &message);
