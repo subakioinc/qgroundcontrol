@@ -249,7 +249,7 @@ void NeowineCRC::encrypt_and_crcupdate(mavlink_message_t *msg)
 	
 	if (dp.getTotalChunkBytes() > 0)
 	{
-		aes_create(aes_key, 128);
+		aes_create(aes_key, 256);
 				
 		aes_cipher(dp.output, dp.input, ENCRYPTION, dp.getTotalChunkBytes());
 		
@@ -277,7 +277,7 @@ void NeowineCRC::decrypt(mavlink_message_t *msg)
 
 	if (dp.getTotalChunkBytes() > 0)
 	{
-		aes_create(aes_key, 128);
+		aes_create(aes_key, 256);
 				
 		aes_cipher(dp.output, dp.input, DECRYPTION, dp.getTotalChunkBytes());
 		
