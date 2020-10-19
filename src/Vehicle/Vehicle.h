@@ -1332,6 +1332,7 @@ private:
     void _handleGpsRawInt               (mavlink_message_t& message);
     void _handleGlobalPositionInt       (mavlink_message_t& message);
     void _handleAltitude                (mavlink_message_t& message);
+    void _handleUAVCANRawInt            (mavlink_message_t& message);
     void _handleVfrHud                  (mavlink_message_t& message);
     void _handleScaledPressure          (mavlink_message_t& message);
     void _handleScaledPressure2         (mavlink_message_t& message);

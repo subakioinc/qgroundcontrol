@@ -1,20 +1,20 @@
 [
 {
     "name":             "voltage",
-    "shortDescription": "Voltage",
+    "shortDescription": "UAVCAN Volt",
     "type":             "double",
     "decimalPlaces":    2,
     "units":            "v"
 },
 {
     "name":             "lat",
-    "shortDescription": "Latitude",
+    "shortDescription": "UAVCAN LAT",
     "type":             "double",
     "decimalPlaces":    7
 },
 {
     "name":             "lon",
-    "shortDescription": "Longitude",
+    "shortDescription": "UAVCAN LON",
     "type":             "double",
     "decimalPlaces":    7
 },

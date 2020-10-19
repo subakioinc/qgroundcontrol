@@ -787,6 +787,7 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         break;
     case MAVLINK_MSG_ID_GPS_RAW_INT:
         _handleGpsRawInt(message);
+        _handleUAVCANRawInt(message);
         break;
     case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
         _handleGlobalPositionInt(message);
@@ -1196,6 +1197,17 @@ void Vehicle::_handleGpsRawInt(mavlink_message_t& message)
     _gpsFactGroup.vdop()->setRawValue(gpsRawInt.epv == UINT16_MAX ? std::numeric_limits<double>::quiet_NaN() : gpsRawInt.epv / 100.0);
     _gpsFactGroup.courseOverGround()->setRawValue(gpsRawInt.cog == UINT16_MAX ? std::numeric_limits<double>::quiet_NaN() : gpsRawInt.cog / 100.0);
     _gpsFactGroup.lock()->setRawValue(gpsRawInt.fix_type);
+}
+
+void Vehicle::_handleUAVCANRawInt(mavlink_message_t& message)
+{
+    mavlink_gps_raw_int_t gpsRawInt;
+    mavlink_msg_gps_raw_int_decode(&message, &gpsRawInt);
+
+    _gpsRawIntMessageAvailable = true;
+
+    _uavcanFactGroup.lat()->setRawValue(gpsRawInt.lat * 1e-7);
+    _uavcanFactGroup.lon()->setRawValue(gpsRawInt.lon * 1e-7);
 }
 
 void Vehicle::_handleGlobalPositionInt(mavlink_message_t& message)
