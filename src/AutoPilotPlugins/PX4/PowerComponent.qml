@@ -394,7 +394,7 @@ SetupPage {
                             id:                 uavcanEnabledCheckBox
                             width:              ScreenTools.defaultFontPixelWidth * 20
                             fact:               uavcanEnable
-                            indexModel:         false
+                            indexModel:         true
                         }
 
                         QGCLabel {

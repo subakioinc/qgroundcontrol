@@ -1,0 +1,27 @@
+[
+{
+    "name":             "voltage",
+    "shortDescription": "Voltage",
+    "type":             "double",
+    "decimalPlaces":    2,
+    "units":            "v"
+},
+{
+    "name":             "lat",
+    "shortDescription": "Latitude",
+    "type":             "double",
+    "decimalPlaces":    7
+},
+{
+    "name":             "lon",
+    "shortDescription": "Longitude",
+    "type":             "double",
+    "decimalPlaces":    7
+},
+{
+    "name":             "ESC",
+    "shortDescription": "ESC",
+    "type":             "double",
+    "decimalPlaces":    1
+}
+]

@@ -6,8 +6,6 @@
  * COPYING.md in the root of the source code directory.
  *
  ****************************************************************************/
-
-
 import QtQuick          2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts  1.11
@@ -17,21 +15,40 @@ import QGroundControl.Controls      1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 
+
 Item {
+    ColumnLayout {
+        id: col
+        spacing:            ScreenTools.defaultFontPixelHeight * 0.5
+        Layout.fillWidth:   true
+
+        QGCLabel {
+            Layout.fillWidth:   true
+            font.pointSize:     ScreenTools.largeFontPointSize
+            text:               qsTr("UAVCAN")
+            visible:            true
+        }
+
+        QGCLabel {
+            Layout.fillWidth:   true
+            wrapMode:           Text.WordWrap
+            text:               qsTr("UAVCAN Setup is used to check the current status of UAVACAN devices.")
+            visible:            true
+        }
+    }
     Image {
         id:                 vehicleIcon
         source:             "/qmlimages/x500.png"
         mipmap:             true
         fillMode:           Image.PreserveAspectFit
-        anchors.top:        parent.left
-        // anchors.bottom:     parent.bottom
+        anchors.top:        col.bottom
     }
 
     UavcanButton{
         id: statusBtn3
         anchors.leftMargin:     35 * ScreenTools.defaultFontPixelWidth
         anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.top: col.bottom
         anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
     }
 
@@ -39,15 +56,16 @@ Item {
         id: statusBtn1
         anchors.leftMargin:     87 * ScreenTools.defaultFontPixelWidth
         anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.top: col.bottom
         anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
+        complete: true
     }
 
     UavcanButton{
         id: statusBtn2
         anchors.leftMargin:     23 * ScreenTools.defaultFontPixelWidth
         anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.top: col.bottom
         anchors.topMargin: 18 * ScreenTools.defaultFontPixelHeight
     }
 
@@ -55,10 +73,9 @@ Item {
         id: statusBtn4
         anchors.leftMargin:     90 * ScreenTools.defaultFontPixelWidth
         anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.top: col.bottom
         anchors.topMargin: 19 * ScreenTools.defaultFontPixelHeight
         complete: true
     }
 }
-
 

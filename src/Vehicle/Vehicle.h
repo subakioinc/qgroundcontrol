@@ -200,6 +200,37 @@ private:
     Fact        _verticalSpeedFact;
 };
 
+// UAVCAN Fact Group 추가
+class VehicleUAVCANFactGroup : public FactGroup
+{
+    Q_OBJECT
+
+public:
+    VehicleUAVCANFactGroup(QObject* parent = nullptr);
+
+    Q_PROPERTY(Fact* voltage            READ voltage            CONSTANT)
+    Q_PROPERTY(Fact* lat                READ lat                CONSTANT)
+    Q_PROPERTY(Fact* lon                READ lon                CONSTANT)
+    Q_PROPERTY(Fact* esc                READ esc                CONSTANT)
+
+    Fact* voltage                   () { return &_voltageFact; }
+    Fact* lat                       () { return &_latFact; }
+    Fact* lon                       () { return &_lonFact; }
+    Fact* esc                       () { return &_escFact; }
+
+    static const char* _voltageFactName;
+    static const char* _latFactName;
+    static const char* _lonFactName;
+    static const char* _escFactName;
+
+
+private:
+    Fact            _voltageFact;
+    Fact            _latFact;
+    Fact            _lonFact;
+    Fact            _escFact;
+};
+
 class VehicleGPSFactGroup : public FactGroup
 {
     Q_OBJECT
@@ -683,6 +714,7 @@ public:
     Q_PROPERTY(FactGroup* clock             READ clockFactGroup             CONSTANT)
     Q_PROPERTY(FactGroup* setpoint          READ setpointFactGroup          CONSTANT)
     Q_PROPERTY(FactGroup* estimatorStatus   READ estimatorStatusFactGroup   CONSTANT)
+    Q_PROPERTY(FactGroup* uavcan            READ uavcanFactGroup            CONSTANT)
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -997,6 +1029,7 @@ public:
     FactGroup* setpointFactGroup            () { return &_setpointFactGroup; }
     FactGroup* distanceSensorFactGroup      () { return &_distanceSensorFactGroup; }
     FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
+    FactGroup* uavcanFactGroup              () { return &_uavcanFactGroup; }
 
     void setConnectionLostEnabled(bool connectionLostEnabled);
 
@@ -1578,6 +1611,7 @@ private:
     VehicleSetpointFactGroup        _setpointFactGroup;
     VehicleDistanceSensorFactGroup  _distanceSensorFactGroup;
     VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
+    VehicleUAVCANFactGroup          _uavcanFactGroup;
 
     static const char* _rollFactName;
     static const char* _pitchFactName;
@@ -1608,6 +1642,7 @@ private:
     static const char* _clockFactGroupName;
     static const char* _distanceSensorFactGroupName;
     static const char* _estimatorStatusFactGroupName;
+    static const char* _uavcanFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs = 100;
 
@@ -1617,3 +1652,4 @@ private:
     static const char* _joystickEnabledSettingsKey;
 
 };
+

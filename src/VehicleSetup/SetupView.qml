@@ -298,6 +298,16 @@ Rectangle {
                 Layout.fillWidth:   true
                 onClicked:          showPanel(this, "SetupParameterEditor.qml")
             }
+            
+            SubMenuButton {
+                id:                 uavcanButton
+                setupIndicator:     false
+                exclusiveGroup:     setupButtonGroup
+                text:               qsTr("UAVCAN")
+                Layout.fillWidth:   true
+
+                onClicked: showPanel(this, "UavcanSettings.qml")
+            }
 
         }
     }

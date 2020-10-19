@@ -91,6 +91,7 @@ const char* Vehicle::_temperatureFactGroupName =        "temperature";
 const char* Vehicle::_clockFactGroupName =              "clock";
 const char* Vehicle::_distanceSensorFactGroupName =     "distanceSensor";
 const char* Vehicle::_estimatorStatusFactGroupName =    "estimatorStatus";
+const char* Vehicle::_uavcanFactGroupName =             "UAVCAN";
 
 // Standard connected vehicle
 Vehicle::Vehicle(LinkInterface*             link,
@@ -218,6 +219,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _clockFactGroup(this)
     , _distanceSensorFactGroup(this)
     , _estimatorStatusFactGroup(this)
+    , _uavcanFactGroup(this)
 {
     connect(_joystickManager, &JoystickManager::activeJoystickChanged, this, &Vehicle::_loadSettings);
     connect(qgcApp()->toolbox()->multiVehicleManager(), &MultiVehicleManager::activeVehicleAvailableChanged, this, &Vehicle::_loadSettings);
@@ -416,6 +418,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _vibrationFactGroup(this)
     , _clockFactGroup(this)
     , _distanceSensorFactGroup(this)
+    , _uavcanFactGroup(this)
 {
     _commonInit();
 
@@ -501,6 +504,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_clockFactGroup,             _clockFactGroupName);
     _addFactGroup(&_distanceSensorFactGroup,    _distanceSensorFactGroupName);
     _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
+    _addFactGroup(&_uavcanFactGroup,            _uavcanFactGroupName);
 
     // Add firmware-specific fact groups, if provided
     QMap<QString, FactGroup*>* fwFactGroups = _firmwarePlugin->factGroups();
@@ -3704,6 +3708,36 @@ void Vehicle::setVtolInFwdFlight(bool vtolInFwdFlight)
                        0, 0, 0, 0, 0, 0);                                       // param 2-7 unused
     }
 }
+
+
+
+
+const char* VehicleUAVCANFactGroup::_latFactName =                 "lat";
+const char* VehicleUAVCANFactGroup::_lonFactName =                 "lon";
+const char* VehicleUAVCANFactGroup::_voltageFactName =             "voltage";
+const char* VehicleUAVCANFactGroup::_escFactName =                 "esc";
+
+
+VehicleUAVCANFactGroup::VehicleUAVCANFactGroup(QObject* parent)
+    : FactGroup(1000, ":/json/Vehicle/UAVCANFact.json", parent)
+    , _latFact              (0, _latFactName,               FactMetaData::valueTypeDouble)
+    , _lonFact              (0, _lonFactName,               FactMetaData::valueTypeDouble)
+    , _voltageFact          (0, _voltageFactName,           FactMetaData::valueTypeDouble)
+    , _escFact              (0, _escFactName,               FactMetaData::valueTypeDouble)
+{
+    _addFact(&_latFact,                 _latFactName);
+    _addFact(&_lonFact,                 _lonFactName);
+    _addFact(&_voltageFact,             _voltageFactName);
+    _addFact(&_escFact,                 _escFactName);
+ 
+
+    _latFact.setRawValue(std::numeric_limits<float>::quiet_NaN());
+    _lonFact.setRawValue(std::numeric_limits<float>::quiet_NaN());
+    _voltageFact.setRawValue("");
+    _escFact.setRawValue("");
+}
+
+
 
 const char* VehicleGPSFactGroup::_latFactName =                 "lat";
 const char* VehicleGPSFactGroup::_lonFactName =                 "lon";
