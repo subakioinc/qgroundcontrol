@@ -727,6 +727,7 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         break;
     case MAVLINK_MSG_ID_HEARTBEAT:
         _handleHeartbeat(message);
+            qDebug() << "HEART BEAT!!!!!!!!!!!!!!!!!!";
         break;
     case MAVLINK_MSG_ID_RADIO_STATUS:
         _handleRadioStatus(message);
@@ -787,7 +788,6 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         break;
     case MAVLINK_MSG_ID_GPS_RAW_INT:
         _handleGpsRawInt(message);
-        _handleUAVCANRawInt(message);
         break;
     case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
         _handleGlobalPositionInt(message);
@@ -853,6 +853,19 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         _handleObstacleDistance(message);
         break;
 
+    case MAVLINK_MSG_ID_UAVCAN_SUBAK_ESC_STATUS:
+        qDebug() << "GET ESC STATUS !!!!!!!!!!!!!!!!!!";
+        _handleUAVCANESCStatus(message);
+        break;
+    case MAVLINK_MSG_ID_UAVCAN_SUBAK_BATTERY_STATUS:
+        qDebug()  << "GET Battery STATUS *************";
+        _handleUAVCANBatteryStatus(message);
+        break;
+    case MAVLINK_MSG_ID_UAVCAN_SUBAK_GNSS_STATUS:
+        qDebug() << "GET GNSS STATUS ==================";
+        _handleUAVCANGNSSStatus(message);
+        break;
+
     case MAVLINK_MSG_ID_SERIAL_CONTROL:
     {
         mavlink_serial_control_t ser;
@@ -860,6 +873,7 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         emit mavlinkSerialControl(ser.device, ser.flags, ser.timeout, ser.baudrate, QByteArray(reinterpret_cast<const char*>(ser.data), ser.count));
     }
         break;
+    
 
         // Following are ArduPilot dialect messages
 #if !defined(NO_ARDUPILOT_DIALECT)
@@ -1199,16 +1213,37 @@ void Vehicle::_handleGpsRawInt(mavlink_message_t& message)
     _gpsFactGroup.lock()->setRawValue(gpsRawInt.fix_type);
 }
 
-void Vehicle::_handleUAVCANRawInt(mavlink_message_t& message)
+void Vehicle::_handleUAVCANGNSSStatus(mavlink_message_t& message)
 {
-    mavlink_gps_raw_int_t gpsRawInt;
-    mavlink_msg_gps_raw_int_decode(&message, &gpsRawInt);
+    mavlink_uavcan_subak_gnss_status_t uacanGNSSRaw;
+    mavlink_msg_uavcan_subak_gnss_status_decode(&message, &uacanGNSSRaw);
 
-    _gpsRawIntMessageAvailable = true;
-
-    _uavcanFactGroup.lat()->setRawValue(gpsRawInt.lat * 1e-7);
-    _uavcanFactGroup.lon()->setRawValue(gpsRawInt.lon * 1e-7);
+    _uavcanFactGroup.lat()->setRawValue(uacanGNSSRaw.lat_lon[0] * 1e-7);
+    _uavcanFactGroup.lon()->setRawValue(uacanGNSSRaw.lat_lon[1] * 1e-7);
 }
+
+void Vehicle::_handleUAVCANBatteryStatus(mavlink_message_t& message)
+{
+    mavlink_uavcan_subak_battery_status_t uacanVlotage;
+    mavlink_msg_uavcan_subak_battery_status_decode(&message, &uacanVlotage);
+
+    _uavcanFactGroup.voltage()->setRawValue(uacanVlotage.voltage);
+}
+
+void Vehicle::_handleUAVCANESCStatus(mavlink_message_t& message)
+{
+    // mavlink_uavcan_subak_esc_status_t uacanESC;
+    // mavlink_msg_uavcan_subak_esc_status_decode(&message, &uacanESC);
+
+    // int uavcanESC = 1;
+    // // for(int i=0; i<4; i++)
+    // // {
+    // //     uavcanESC[i] = uacanESC.motors_on[i];
+    // // }
+    // emit receivedUAVCANESCStatus(uavcanESC);
+
+}
+
 
 void Vehicle::_handleGlobalPositionInt(mavlink_message_t& message)
 {
@@ -3734,7 +3769,7 @@ VehicleUAVCANFactGroup::VehicleUAVCANFactGroup(QObject* parent)
     : FactGroup(1000, ":/json/Vehicle/UAVCANFact.json", parent)
     , _latFact              (0, _latFactName,               FactMetaData::valueTypeDouble)
     , _lonFact              (0, _lonFactName,               FactMetaData::valueTypeDouble)
-    , _voltageFact          (0, _voltageFactName,           FactMetaData::valueTypeDouble)
+    , _voltageFact          (0, _voltageFactName,           FactMetaData::valueTypeFloat)
     , _escFact              (0, _escFactName,               FactMetaData::valueTypeDouble)
 {
     _addFact(&_latFact,                 _latFactName);

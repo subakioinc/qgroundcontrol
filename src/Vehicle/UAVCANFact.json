@@ -2,7 +2,7 @@
 {
     "name":             "voltage",
     "shortDescription": "UAVCAN Volt",
-    "type":             "double",
+    "type":             "float",
     "decimalPlaces":    2,
     "units":            "v"
 },

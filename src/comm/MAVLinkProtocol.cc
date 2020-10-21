@@ -216,6 +216,9 @@ void MAVLinkProtocol::receiveBytes(LinkInterface* link, QByteArray b)
 
     for (int position = 0; position < b.size(); position++) {
         if (mavlink_parse_char(mavlinkChannel, static_cast<uint8_t>(b[position]), &_message, &_status)) {
+            if(_message.msgid >= 3900) {
+                qDebug() << "subak uavcan message : " ; 
+            }
             // Got a valid message
             if (!link->decodedFirstMavlinkPacket()) {
                 link->setDecodedFirstMavlinkPacket(true);

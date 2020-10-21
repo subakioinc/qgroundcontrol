@@ -17,6 +17,18 @@ import QGroundControl.ScreenTools   1.0
 
 
 Item {
+
+    property int    uavcan1: 0
+    property int    uavcan2: 0 
+    property int    uavcan3: 0
+    property int    uavcan4: 0
+    // property variant uavcanESC: uavcanESC
+
+    // Connections {
+    //     target : QGroundControl.vehicle
+    //     onReceivedUAVCANESCStatus:statusBtn1.complete = uavcanESC;
+    // }
+
     ColumnLayout {
         id: col
         spacing:            ScreenTools.defaultFontPixelHeight * 0.5
@@ -45,20 +57,12 @@ Item {
     }
 
     UavcanButton{
-        id: statusBtn3
-        anchors.leftMargin:     35 * ScreenTools.defaultFontPixelWidth
-        anchors.left: parent.left
-        anchors.top: col.bottom
-        anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
-    }
-
-    UavcanButton{
-        id: statusBtn1
-        anchors.leftMargin:     87 * ScreenTools.defaultFontPixelWidth
-        anchors.left: parent.left
-        anchors.top: col.bottom
-        anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
-        complete: true
+    id: statusBtn1
+    anchors.leftMargin:     87 * ScreenTools.defaultFontPixelWidth
+    anchors.left: parent.left
+    anchors.top: col.bottom
+    anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
+    complete: uavcan1
     }
 
     UavcanButton{
@@ -67,7 +71,18 @@ Item {
         anchors.left: parent.left
         anchors.top: col.bottom
         anchors.topMargin: 18 * ScreenTools.defaultFontPixelHeight
+        complete: uavcan2
     }
+
+    UavcanButton{
+        id: statusBtn3
+        anchors.leftMargin:     35 * ScreenTools.defaultFontPixelWidth
+        anchors.left: parent.left
+        anchors.top: col.bottom
+        anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
+        complete: uavcan3
+    }
+
 
     UavcanButton{
         id: statusBtn4
@@ -75,7 +90,7 @@ Item {
         anchors.left: parent.left
         anchors.top: col.bottom
         anchors.topMargin: 19 * ScreenTools.defaultFontPixelHeight
-        complete: true
+        complete: uavcan1
     }
 }
 

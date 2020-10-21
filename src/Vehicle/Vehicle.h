@@ -1268,6 +1268,9 @@ signals:
     void gimbalDataChanged              ();
     void isROIEnabledChanged            ();
 
+    // uavcan 
+    // void receivedUAVCANESCStatus        (int uavcanESC);
+
 private slots:
     void _mavlinkMessageReceived        (LinkInterface* link, mavlink_message_t message);
     void _linkInactiveOrDeleted         (LinkInterface* link);
@@ -1332,7 +1335,6 @@ private:
     void _handleGpsRawInt               (mavlink_message_t& message);
     void _handleGlobalPositionInt       (mavlink_message_t& message);
     void _handleAltitude                (mavlink_message_t& message);
-    void _handleUAVCANRawInt            (mavlink_message_t& message);
     void _handleVfrHud                  (mavlink_message_t& message);
     void _handleScaledPressure          (mavlink_message_t& message);
     void _handleScaledPressure2         (mavlink_message_t& message);
@@ -1349,6 +1351,10 @@ private:
     void _handleMessageInterval         (const mavlink_message_t& message);
     void _handleGimbalOrientation       (const mavlink_message_t& message);
     void _handleObstacleDistance        (const mavlink_message_t& message);
+    
+    void _handleUAVCANESCStatus        (mavlink_message_t& message);
+    void _handleUAVCANBatteryStatus     (mavlink_message_t& message);
+    void _handleUAVCANGNSSStatus        (mavlink_message_t& message);
     // ArduPilot dialect messages
 #if !defined(NO_ARDUPILOT_DIALECT)
     void _handleCameraFeedback          (const mavlink_message_t& message);
