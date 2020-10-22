@@ -1232,15 +1232,13 @@ void Vehicle::_handleUAVCANBatteryStatus(mavlink_message_t& message)
 
 void Vehicle::_handleUAVCANESCStatus(mavlink_message_t& message)
 {
-    // mavlink_uavcan_subak_esc_status_t uacanESC;
-    // mavlink_msg_uavcan_subak_esc_status_decode(&message, &uacanESC);
+    mavlink_uavcan_subak_esc_status_t uacanESC;
+    mavlink_msg_uavcan_subak_esc_status_decode(&message, &uacanESC);
 
-    // int uavcanESC = 1;
-    // // for(int i=0; i<4; i++)
-    // // {
-    // //     uavcanESC[i] = uacanESC.motors_on[i];
-    // // }
-    // emit receivedUAVCANESCStatus(uavcanESC);
+    _uavcanFactGroup.esc1()->setRawValue(uacanESC.motors_on[0]);
+    _uavcanFactGroup.esc2()->setRawValue(uacanESC.motors_on[1]);
+    _uavcanFactGroup.esc3()->setRawValue(uacanESC.motors_on[2]);
+    _uavcanFactGroup.esc4()->setRawValue(uacanESC.motors_on[3]);
 
 }
 
@@ -3762,7 +3760,10 @@ void Vehicle::setVtolInFwdFlight(bool vtolInFwdFlight)
 const char* VehicleUAVCANFactGroup::_latFactName =                 "lat";
 const char* VehicleUAVCANFactGroup::_lonFactName =                 "lon";
 const char* VehicleUAVCANFactGroup::_voltageFactName =             "voltage";
-const char* VehicleUAVCANFactGroup::_escFactName =                 "esc";
+const char* VehicleUAVCANFactGroup::_esc1FactName =                 "esc1";
+const char* VehicleUAVCANFactGroup::_esc2FactName =                 "esc2";
+const char* VehicleUAVCANFactGroup::_esc3FactName =                 "esc3";
+const char* VehicleUAVCANFactGroup::_esc4FactName =                 "esc4";
 
 
 VehicleUAVCANFactGroup::VehicleUAVCANFactGroup(QObject* parent)
@@ -3770,18 +3771,27 @@ VehicleUAVCANFactGroup::VehicleUAVCANFactGroup(QObject* parent)
     , _latFact              (0, _latFactName,               FactMetaData::valueTypeDouble)
     , _lonFact              (0, _lonFactName,               FactMetaData::valueTypeDouble)
     , _voltageFact          (0, _voltageFactName,           FactMetaData::valueTypeFloat)
-    , _escFact              (0, _escFactName,               FactMetaData::valueTypeDouble)
+    , _esc1Fact              (0, _esc1FactName,              FactMetaData::valueTypeInt8)
+    , _esc2Fact              (0, _esc2FactName,              FactMetaData::valueTypeInt8)
+    , _esc3Fact              (0, _esc3FactName,              FactMetaData::valueTypeInt8)
+    , _esc4Fact              (0, _esc4FactName,              FactMetaData::valueTypeInt8)
 {
-    _addFact(&_latFact,                 _latFactName);
-    _addFact(&_lonFact,                 _lonFactName);
-    _addFact(&_voltageFact,             _voltageFactName);
-    _addFact(&_escFact,                 _escFactName);
+    _addFact(&_latFact,                  _latFactName);
+    _addFact(&_lonFact,                  _lonFactName);
+    _addFact(&_voltageFact,              _voltageFactName);
+    _addFact(&_esc1Fact,                 _esc1FactName);
+    _addFact(&_esc2Fact,                 _esc2FactName);
+    _addFact(&_esc3Fact,                 _esc3FactName);
+    _addFact(&_esc4Fact,                 _esc4FactName);
  
 
     _latFact.setRawValue(std::numeric_limits<float>::quiet_NaN());
     _lonFact.setRawValue(std::numeric_limits<float>::quiet_NaN());
     _voltageFact.setRawValue("");
-    _escFact.setRawValue("");
+    _esc1Fact.setRawValue("");
+    _esc2Fact.setRawValue("");
+    _esc3Fact.setRawValue("");
+    _esc4Fact.setRawValue("");
 }
 
 

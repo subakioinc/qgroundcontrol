@@ -211,24 +211,37 @@ public:
     Q_PROPERTY(Fact* voltage            READ voltage            CONSTANT)
     Q_PROPERTY(Fact* lat                READ lat                CONSTANT)
     Q_PROPERTY(Fact* lon                READ lon                CONSTANT)
-    Q_PROPERTY(Fact* esc                READ esc                CONSTANT)
+    Q_PROPERTY(Fact* esc1               READ esc1               CONSTANT)
+    Q_PROPERTY(Fact* esc2               READ esc2               CONSTANT)
+    Q_PROPERTY(Fact* esc3               READ esc3               CONSTANT)
+    Q_PROPERTY(Fact* esc4               READ esc4               CONSTANT)
+    
 
     Fact* voltage                   () { return &_voltageFact; }
     Fact* lat                       () { return &_latFact; }
     Fact* lon                       () { return &_lonFact; }
-    Fact* esc                       () { return &_escFact; }
+    Fact* esc1                      () { return &_esc1Fact; }
+    Fact* esc2                      () { return &_esc2Fact; }
+    Fact* esc3                      () { return &_esc3Fact; }
+    Fact* esc4                      () { return &_esc4Fact; }
 
     static const char* _voltageFactName;
     static const char* _latFactName;
     static const char* _lonFactName;
-    static const char* _escFactName;
+    static const char* _esc1FactName;
+    static const char* _esc2FactName;
+    static const char* _esc3FactName;
+    static const char* _esc4FactName;
 
 
 private:
     Fact            _voltageFact;
     Fact            _latFact;
     Fact            _lonFact;
-    Fact            _escFact;
+    Fact            _esc1Fact;
+    Fact            _esc2Fact;
+    Fact            _esc3Fact;
+    Fact            _esc4Fact;
 };
 
 class VehicleGPSFactGroup : public FactGroup
@@ -1267,9 +1280,6 @@ signals:
     void gimbalYawChanged               ();
     void gimbalDataChanged              ();
     void isROIEnabledChanged            ();
-
-    // uavcan 
-    // void receivedUAVCANESCStatus        (int uavcanESC);
 
 private slots:
     void _mavlinkMessageReceived        (LinkInterface* link, mavlink_message_t message);

@@ -6,28 +6,29 @@
  * COPYING.md in the root of the source code directory.
  *
  ****************************************************************************/
-import QtQuick          2.11
-import QtQuick.Controls 2.4
-import QtQuick.Layouts  1.11
+import QtQuick          2.3
+import QtQuick.Dialogs  1.2
+import QtQuick.Layouts  1.2
 
-import QGroundControl               1.0
 import QGroundControl.Controls      1.0
-import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
+import QGroundControl.FactSystem    1.0
+import QGroundControl.FactControls  1.0
+import QGroundControl.Controllers   1.0
+import QGroundControl.Palette       1.0
+import QGroundControl               1.0
 
 
 Item {
 
-    property int    uavcan1: 0
-    property int    uavcan2: 0 
-    property int    uavcan3: 0
-    property int    uavcan4: 0
-    // property variant uavcanESC: uavcanESC
+    property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
+    property var    factGroup:     _activeVehicle.getFactGroup("UAVCAN")
 
-    // Connections {
-    //     target : QGroundControl.vehicle
-    //     onReceivedUAVCANESCStatus:statusBtn1.complete = uavcanESC;
-    // }
+    property int    uavcan1: (factGroup.getFact("esc1")).value
+    property int    uavcan2: (factGroup.getFact("esc2")).value
+    property int    uavcan3: (factGroup.getFact("esc3")).value
+    property int    uavcan4: (factGroup.getFact("esc4")).value
+
 
     ColumnLayout {
         id: col
@@ -57,12 +58,12 @@ Item {
     }
 
     UavcanButton{
-    id: statusBtn1
-    anchors.leftMargin:     87 * ScreenTools.defaultFontPixelWidth
-    anchors.left: parent.left
-    anchors.top: col.bottom
-    anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
-    complete: uavcan1
+        id: statusBtn1
+        anchors.leftMargin:     87 * ScreenTools.defaultFontPixelWidth
+        anchors.left: parent.left
+        anchors.top: col.bottom
+        anchors.topMargin: 4 * ScreenTools.defaultFontPixelHeight
+        complete: uavcan1
     }
 
     UavcanButton{
@@ -90,7 +91,7 @@ Item {
         anchors.left: parent.left
         anchors.top: col.bottom
         anchors.topMargin: 19 * ScreenTools.defaultFontPixelHeight
-        complete: uavcan1
+        complete: uavcan4
     }
 }
 

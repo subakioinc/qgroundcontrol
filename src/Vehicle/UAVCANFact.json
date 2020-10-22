@@ -19,9 +19,27 @@
     "decimalPlaces":    7
 },
 {
-    "name":             "ESC",
-    "shortDescription": "ESC",
-    "type":             "double",
+    "name":             "esc1",
+    "shortDescription": "UAVCAN ESC1",
+    "type":             "uint8",
+    "decimalPlaces":    1
+},
+{
+    "name":             "esc2",
+    "shortDescription": "UAVCAN ESC2",
+    "type":             "uint8",
+    "decimalPlaces":    1
+},
+{
+    "name":             "esc3",
+    "shortDescription": "UAVCAN ESC3",
+    "type":             "uint8",
+    "decimalPlaces":    1
+},
+{
+    "name":             "esc4",
+    "shortDescription": "UAVCAN ESC4",
+    "type":             "uint8",
     "decimalPlaces":    1
 }
 ]

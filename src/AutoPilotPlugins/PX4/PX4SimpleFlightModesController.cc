@@ -37,7 +37,7 @@ void PX4SimpleFlightModesController::_rcChannelsChanged(int channelCount, int pw
     for (int i=0; i<channelCount; i++) {
         _rcChannelValues.append(pwmValues[i]);
     }
-    emit rcChannelValuesChanged();
+    emit rcChannelValuesChanged(); //누구한테 singal를 보내나?
 
     Fact* pFact = getParameterFact(-1, "RC_MAP_FLTMODE");
     if(!pFact) {
